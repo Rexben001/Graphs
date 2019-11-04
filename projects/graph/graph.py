@@ -20,7 +20,7 @@ class Graph:
         """
         Add a directed edge to the graph.
         """
-        for v1 in self.vertices and v2 in self.vertices:
+        if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)
 
     def bft(self, starting_vertex):
@@ -29,15 +29,15 @@ class Graph:
         beginning from starting_vertex.
         """
         q = Queue()
-        visited = {}
+        visited = set()
 
         q.enqueue(starting_vertex)
         while q.size() > 0:
             val = q.dequeue()
             if val not in visited:
-                print(val)
+                print('bft>>>>>>>>>', val)
                 visited.add(val)
-                for i in self.vertices:
+                for i in self.vertices[val]:
                     q.enqueue(i)
 
     def dft(self, starting_vertex):
@@ -46,15 +46,15 @@ class Graph:
         beginning from starting_vertex.
         """
         s = Stack()
-        visited = {}
+        visited = set()
 
         s.push(starting_vertex)
         while s.size() > 0:
             val = s.pop()
             if val not in visited:
-                print(val)
+                print('dft>>>>>>>>>', val)
                 visited.add(val)
-                for i in self.vertices:
+                for i in self.vertices[val]:
                     s.push(i)
 
     def dft_recursive(self, starting_vertex):
