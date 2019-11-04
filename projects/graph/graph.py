@@ -28,7 +28,17 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        q = Queue()
+        visited = {}
+
+        q.enqueue(starting_vertex)
+        while q.size() > 0:
+            val = q.dequeue()
+            if val not in visited:
+                print(val)
+                visited.add(val)
+                for i in self.vertices:
+                    q.enqueue(i)
 
     def dft(self, starting_vertex):
         """
