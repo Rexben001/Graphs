@@ -91,7 +91,19 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+        visited = set()
+
+        s.push(starting_vertex)
+        while s.size() > 0:
+            val = s.pop()
+            if val == destination_vertex:
+                return True
+            if val not in visited:
+                visited.add(val)
+                for i in self.vertices[val]:
+                    s.push(i)
+        return False
 
 
 if __name__ == '__main__':
