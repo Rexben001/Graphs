@@ -1,8 +1,27 @@
+from random import random, shuffle
+
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return len(self.queue)
 
 
 class User:
     def __init__(self, name):
         self.name = name
+
 
 class SocialGraph:
     def __init__(self):
@@ -34,33 +53,78 @@ class SocialGraph:
         """
         Takes a number of users and an average number of friendships
         as arguments
-
         Creates that number of users and a randomly distributed friendships
         between those users.
-
         The number of users must be greater than the average number of friendships.
         """
         # Reset graph
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
         # Add users
+        # loop over a range of 0 to numUsers
+        for i in range(0, numUsers):
+            # add user to the graph
+            self.addUser(f"User {i}")
 
-        # Create friendships
+        # create friendships
+
+        # Generate all friendship combinations
+        # make a list of possible friendships
+        possibleFreindships = []
+        # avoid duplicates ensuring that the first number is smaller than the second
+
+        # loop over userID in users
+        for userID in self.users:
+            # loop over friend id in a range from user id + 1 to the lastID +1
+            for friendID in range(userID + 1, self.lastID + 1):
+                # append the tuple of (user id , friend id) to the possible friendships list
+                possibleFreindships.append((userID, friendID))
+        # shuffle the possible friendships using the random.suffle method
+        shuffle(possibleFreindships)
+        # create afriendships of the first x ammount of pairs in the list
+        # X determined by the formula: numusers * avgFriendships // 2
+        # we need to divide by to as each createFriendship adds 2 friendships
+        # loop over a range to numUsers * avgFriendships // 2
+        for i in range(numUsers * avgFriendships // 2):
+            # set the friendship to possible friends at i
+            friendship = possibleFreindships[i]
+            # addfriendship of friendship[0] and friendship[1]
+            self.addFriendship(friendship[0], friendship[1])
 
     def getAllSocialPaths(self, userID):
         """
         Takes a user's userID as an argument
-
         Returns a dictionary containing every user in that user's
         extended network with the shortest friendship path between them.
-
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        visited = {}
+        # create a queue
+        q = Queue()
+        # add the userID to the queue as a list
+        q.enqueue([userID])
+
+        # loop while the size of the queue is greater than 0
+        while q.size() > 0:
+            # remove the last item from the queue and save it into a path
+            path = q.dequeue()
+            # get the last elem from the list
+            newUserID = path[-1]
+            # check if the newUserID is not in visited
+            if newUserID not in visited:
+                # save the newUserID and path as key/value pair
+                visited[newUserID] = path
+
+                # loop over newUserID in the Graph
+                for friendID in self.friendships[newUserID]:
+                    # copy the path to a list
+                    new_path = list(path)
+                    # append the friendID to thr new_path
+                    new_path.append(friendID)
+                    # add thr new_path to the queue
+                    q.enqueue(new_path)
         return visited
 
 
